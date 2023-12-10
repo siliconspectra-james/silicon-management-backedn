@@ -1,21 +1,24 @@
-package com.firebase.candidatemanagement.Config;
+package com.siliconspectra.management.Config;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import org.springframework.context.annotation.Bean;
+import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 
 @Configuration
 public class FirebaseAuthConfig {
-    @Bean
-    public void firebaseInitialize() throws IOException {
+
+    @PostConstruct
+    public void init() throws IOException {
+        Resource config = new ClassPathResource("silicon-spectra-management-firebase-adminsdk-mxlyv-230feab587.json");
         FileInputStream serviceAccount =
-                new FileInputStream("E:\\candidate-management\\src\\main\\resources\\candidate-management-a62c5-firebase-adminsdk-sbwgl-6b04519ab5.json");
+                new FileInputStream(config.getFile());
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
@@ -23,5 +26,9 @@ public class FirebaseAuthConfig {
 
         FirebaseApp.initializeApp(options);
 
+    }
+
+    public static void main(String[] args) throws IOException {
+        new FirebaseAuthConfig().init();
     }
 }

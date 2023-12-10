@@ -1,13 +1,13 @@
-package com.firebase.candidatemanagement;
+package com.siliconspectra.management;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CandidateManagementApplication {
+public class ManagementApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CandidateManagementApplication.class, args);
+		SpringApplication.run(ManagementApplication.class, args);
 	}
 
 }

@@ -1,0 +1,7 @@
+##get idtoken by username and password
+
+curl -i -X POST \
+   -H "Content-Type:application/json" \
+   -d \
+'{"email": "jameszhang1023@yahoo.com","password":"j753951","returnSecureToken":true}' \
+ 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyBdv7pXR1-C5G_Rk9XACk33lMii0fuCf9Y'
