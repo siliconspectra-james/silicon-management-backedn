@@ -25,7 +25,7 @@ public class UserFilter implements Filter {
         String idToken = request.getHeader("auth");
         //String idToken = request.getHeader("auth").split(" ")[1];
         String url = request.getRequestURI();
-        if ("/login".equals(url) || "/".equals(url)) {
+        if ("/login".equals(url) || "/".equals(url) || url.contains("health")) {
             filterChain.doFilter(servletRequest, servletResponse);
         }else if (url.contains("admin")){
             try {
