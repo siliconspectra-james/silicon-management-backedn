@@ -1,12 +1,16 @@
 package com.siliconspectra.management.Repository;
 
+
 import com.siliconspectra.management.Entity.User;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepository {
+public interface UserRepository extends MongoRepository<User, String> {
 
-    public User getUserById(String uid) {
-        return new User();
-    }
+    @Query("{userId:'?0'}")
+    User findUserByUserId (String userId);
+
+
 }
