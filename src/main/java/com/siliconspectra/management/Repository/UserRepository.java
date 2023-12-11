@@ -12,5 +12,11 @@ public interface UserRepository extends MongoRepository<User, String> {
     @Query("{userId:'?0'}")
     User findUserByUserId (String userId);
 
+    //@Query("{'userID' : ?0}")
+    void deleteByUserId(String userId);
+
+
+
+
 
 }

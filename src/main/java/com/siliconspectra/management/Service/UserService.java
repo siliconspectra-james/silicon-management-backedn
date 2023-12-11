@@ -5,6 +5,7 @@ import com.siliconspectra.management.Repository.UserRepository;
 import com.siliconspectra.management.exception.CustomException;
 import com.siliconspectra.management.vo.Candidate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+    private MongoTemplate mongoTemplate;
 
     public Candidate getCandidateById(String uid) throws CustomException {
         User user = userRepository.findUserByUserId(uid);
@@ -66,10 +68,10 @@ public class UserService {
     public void deleteUserById(String userId) throws CustomException{
 
         try{
-            userRepository.deleteById(userId);
+            userRepository.deleteByUserId(userId);
 
         }catch (Exception e) {
-            throw new CustomException("delete user success");
+            throw new CustomException("delete user failed");
         }
     }
     //Convert user to candidate (helper)

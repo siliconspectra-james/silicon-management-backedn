@@ -43,7 +43,7 @@ public class UserController {
         return userService.getAllUsers();
     }
     @DeleteMapping("/admin/delete/{uid}")
-    public ResponseEntity<Response> deleteUser(@PathVariable String uid) throws  CustomException{
+    public ResponseEntity<Response> deleteUser(@PathVariable String uid) throws  Exception{
         userService.deleteUserById(uid);
         return new ResponseEntity<>(new Response("delete user successful"), HttpStatus.OK);
 
