@@ -132,19 +132,19 @@ public class UserService {
         candidate.setDegree(user.getUserDegree());
         return candidate;
     }
-    private User mapCandidateToUser(Candidate candidate,User user){
-        user.setUserName(candidate.getCandidateName());
-        user.setUserEmail(candidate.getCandidateEmail());
-        user.setUserPhoneNumber(candidate.getCandidatePhoneNumber());
-        user.setUserGender(candidate.getCandidateGender());
-        user.setUserBirthday(candidate.getCandidateBirthday());
-        user.setUserLinkedin(candidate.getCandidateLinkedin());
-        user.setUserLocation(candidate.getCandidateLocation());
-        user.setUserMarketingName(candidate.getCandidateMarketingName());
-        user.setUserMarketingEmail(candidate.getCandidateMarketingEmail());
-        user.setUserMarketingPhoneNumber(candidate.getCandidateMarketingPhoneNumber());
-        user.setUserVisaType(candidate.getCandidateVisaType());
-        user.setUserDegree(candidate.getDegree());
-        return user;
-    }
+//    private User mapCandidateToUser(Candidate candidate,User user){
+//        user.setUserName(candidate.getCandidateName());
+//        user.setUserEmail(candidate.getCandidateEmail());
+//        user.setUserPhoneNumber(candidate.getCandidatePhoneNumber());
+//        user.setUserGender(candidate.getCandidateGender());
+//        user.setUserBirthday(candidate.getCandidateBirthday());
+//        user.setUserLinkedin(candidate.getCandidateLinkedin());
+//        user.setUserLocation(candidate.getCandidateLocation());
+//        user.setUserMarketingName(candidate.getCandidateMarketingName());
+//        user.setUserMarketingEmail(candidate.getCandidateMarketingEmail());
+//        user.setUserMarketingPhoneNumber(candidate.getCandidateMarketingPhoneNumber());
+//        user.setUserVisaType(candidate.getCandidateVisaType());
+//        user.setUserDegree(candidate.getDegree());
+//        return user;
+//    }
 }
