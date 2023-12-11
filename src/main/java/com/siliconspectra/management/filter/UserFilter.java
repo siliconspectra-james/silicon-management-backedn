@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Component
 @WebFilter
 public class UserFilter implements Filter {
