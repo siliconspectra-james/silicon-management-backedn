@@ -1,11 +1,15 @@
 package com.siliconspectra.management.Service;
 
+import com.mongodb.client.result.UpdateResult;
 import com.siliconspectra.management.Entity.User;
 import com.siliconspectra.management.Repository.UserRepository;
 import com.siliconspectra.management.exception.CustomException;
 import com.siliconspectra.management.vo.Candidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +21,8 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
     private MongoTemplate mongoTemplate;
 
     public Candidate getCandidateById(String uid) throws CustomException {
@@ -29,9 +35,16 @@ public class UserService {
 
     }
 
-    public void createUser(User user) throws CustomException {
+    public String createUser(User user) throws CustomException {
         try {
-            userRepository.save(user);
+            User checkUser = userRepository.findUserByUserId(user.getUserId());
+            if(checkUser==null){
+                userRepository.save(user);
+                return "create user success";
+            }else{
+                return "user exists already";
+            }
+
         }catch (Exception e) {
             throw new CustomException("create user error");
         }
@@ -39,8 +52,26 @@ public class UserService {
 
     public void updateUser(String uid,Candidate candidate) throws CustomException{
         try{
-            User user = userRepository.findUserByUserId(uid);
-            System.out.println(this.mapCandidateToUser(candidate,user));
+//            User user = userRepository.findUserByUserId(uid);
+//            userRepository.save(this.mapCandidateToUser(candidate,user));
+            Query query = new Query(Criteria.where("userId").is(uid));
+            Update update = new Update()
+                    .set("userName", candidate.getCandidateName())
+                    .set("userEmail", candidate.getCandidateEmail())
+                    .set("userPhoneNumber", candidate.getCandidatePhoneNumber())
+                    .set("userGender", candidate.getCandidateGender())
+                    .set("userBirthday", candidate.getCandidateBirthday())
+                    .set("userLinkedin", candidate.getCandidateLinkedin())
+                    .set("userLocation", candidate.getCandidateLocation())
+                    .set("userMarketingName", candidate.getCandidateMarketingName())
+                    .set("userMarketingEmail", candidate.getCandidateMarketingEmail())
+                    .set("userMarketingPhoneNumber", candidate.getCandidateMarketingPhoneNumber())
+                    .set("userVisaType", candidate.getCandidateVisaType())
+                    .set("userDegree", candidate.getDegree());
+
+            UpdateResult updateResult = mongoTemplate.updateFirst(query, update, User.class);
+
+
 
         }catch (Exception e) {
             throw new CustomException("update user error");
@@ -51,7 +82,7 @@ public class UserService {
 
     }
 
-    public List<Candidate> getAllUsers() throws CustomException{
+    public List<Candidate> getAllCandidates() throws CustomException{
         List<User> userList = userRepository.findAll();
         if(!userList.isEmpty()) {
             return userList
@@ -59,6 +90,16 @@ public class UserService {
                     .map(this::mapUserToCandidate)
                     .toList();
 
+        }else{
+            throw new CustomException("Unable to fetch all users");
+        }
+
+    }
+    //test to get all user
+    public List<User> getAllUsers() throws CustomException{
+        List<User> userList = userRepository.findAll();
+        if(!userList.isEmpty()) {
+            return userList;
         }else{
             throw new CustomException("Unable to fetch all users");
         }

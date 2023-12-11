@@ -33,15 +33,22 @@ public class UserController {
 
     @PostMapping("/admin/{uid}")
     public ResponseEntity<Response> createUser(@PathVariable String uid, @RequestBody User user) throws CustomException {
-        userService.createUser(user);
-        return new ResponseEntity<>(new Response("create user successful"), HttpStatus.OK);
+        String message = userService.createUser(user);
+        return new ResponseEntity<>(new Response(message), HttpStatus.OK);
     }
 
     @GetMapping("/admin/all")
-    public List<Candidate> getAllUsers()throws CustomException{
+    public List<Candidate> getAllCandidates()throws CustomException{
 
-        return userService.getAllUsers();
+        return userService.getAllCandidates();
     }
+
+    //This is for test
+//    @GetMapping("/admin/alluser")
+//    public List<User> getAllUsers()throws CustomException{
+//
+//        return userService.getAllUsers();
+//    }
     @DeleteMapping("/admin/delete/{uid}")
     public ResponseEntity<Response> deleteUser(@PathVariable String uid) throws  Exception{
         userService.deleteUserById(uid);
