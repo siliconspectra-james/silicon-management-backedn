@@ -8,14 +8,9 @@ import com.siliconspectra.management.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -31,14 +26,34 @@ public class UserController {
     }
 
     @PutMapping("/candidate/{uid}")
-    public Candidate updateCandidate(@PathVariable String uid, @RequestBody Candidate c) {
-        return null;
+    public ResponseEntity<Response> updateCandidate(@PathVariable String uid, @RequestBody Candidate c) throws CustomException{
+        userService.updateUser(uid,c);
+        return new ResponseEntity<>(new Response("User update success"), HttpStatus.OK);
     }
 
     @PostMapping("/admin/{uid}")
     public ResponseEntity<Response> createUser(@PathVariable String uid, @RequestBody User user) throws CustomException {
-        userService.createUser(user);
-        return new ResponseEntity<>(new Response("create user successful"), HttpStatus.OK);
+        String message = userService.createUser(user);
+        return new ResponseEntity<>(new Response(message), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/all")
+    public List<Candidate> getAllCandidates()throws CustomException{
+
+        return userService.getAllCandidates();
+    }
+
+    //This is for test
+//    @GetMapping("/admin/alluser")
+//    public List<User> getAllUsers()throws CustomException{
+//
+//        return userService.getAllUsers();
+//    }
+    @DeleteMapping("/admin/delete/{uid}")
+    public ResponseEntity<Response> deleteUser(@PathVariable String uid) throws  Exception{
+        userService.deleteUserById(uid);
+        return new ResponseEntity<>(new Response("delete user successful"), HttpStatus.OK);
+
     }
 
 
