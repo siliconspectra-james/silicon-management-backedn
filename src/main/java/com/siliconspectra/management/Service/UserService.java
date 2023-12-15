@@ -7,10 +7,9 @@ import com.siliconspectra.management.exception.CustomException;
 import com.siliconspectra.management.vo.Candidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Service;
+import java.lang.reflect.Field;
 
 import java.util.List;
 
@@ -35,6 +34,17 @@ public class UserService {
 
     }
 
+    public User getUserById(String uid) throws CustomException {
+        User user = userRepository.findUserByUserId(uid);
+        if (user != null) {
+            return user;
+
+        }else {
+            throw new CustomException("user not found");
+        }
+
+    }
+
     public String createUser(User user) throws CustomException {
         try {
             User checkUser = userRepository.findUserByUserId(user.getUserId());
@@ -50,10 +60,8 @@ public class UserService {
         }
     }
 
-    public void updateUser(String uid,Candidate candidate) throws CustomException{
+    public void updateCandidate(String uid,Candidate candidate) throws CustomException{
         try{
-//            User user = userRepository.findUserByUserId(uid);
-//            userRepository.save(this.mapCandidateToUser(candidate,user));
             Query query = new Query(Criteria.where("userId").is(uid));
             Update update = new Update()
                     .set("userName", candidate.getCandidateName())
@@ -77,8 +85,16 @@ public class UserService {
             throw new CustomException("update user error");
         }
 
+    }
+    public void updateUser(String uid,User user) throws CustomException{
+        try{
+            Query query = new Query(Criteria.where("userId").is(uid));
+            Update update = this.createUpdate(user);
+            UpdateResult updateResult = mongoTemplate.updateFirst(query, update, User.class);
 
-
+        }catch (Exception e) {
+            throw new CustomException("update user error");
+        }
 
     }
 
@@ -95,6 +111,9 @@ public class UserService {
         }
 
     }
+
+
+
     //test to get all user
     public List<User> getAllUsers() throws CustomException{
         List<User> userList = userRepository.findAll();
@@ -147,4 +166,25 @@ public class UserService {
 //        user.setUserDegree(candidate.getDegree());
 //        return user;
 //    }
+
+    private Update createUpdate(User user) {
+        Update update = new Update();
+        Class<?> clazz = User.class;
+
+        for (Field field : clazz.getDeclaredFields()) {
+            field.setAccessible(true);
+
+            // Exclude the "uid" field from being updated
+            if (!field.getName().equals("userID")) {
+                try {
+                    Object value = field.get(user);
+                    update.set(field.getName(), value);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace(); // Handle the exception appropriately
+                }
+            }
+        }
+
+        return update;
+    }
 }
