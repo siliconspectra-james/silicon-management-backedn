@@ -12,6 +12,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -27,6 +28,13 @@ public class UserFilter implements Filter {
         String idToken = request.getHeader("auth");
         //String idToken = request.getHeader("auth").split(" ")[1];
         String url = request.getRequestURI();
+
+        HttpServletResponse resp = (HttpServletResponse) servletResponse;
+        resp.addHeader("Access-Control-Allow-Credentials", "true");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
+        resp.addHeader("Access-Control-Allow-Headers", "Content-Type,X-CAF-Authorization-Token,sessionToken,X-TOKEN");
+
         if ("/login".equals(url) || "/".equals(url) || url.contains("health")) {
             filterChain.doFilter(servletRequest, servletResponse);
         }else if (url.contains("admin")){
